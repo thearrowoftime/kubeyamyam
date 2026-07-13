@@ -1,4 +1,4 @@
-# k8s-sec
+# kubeyamyam
 
 Kubernetes manifest security scanner with an interactive TUI, JSON/SARIF export,
 and CI-friendly exit codes.
@@ -19,12 +19,12 @@ cargo build --release
 
 ```bash
 # Interactive TUI (default on a TTY)
-k8s-sec examples
+kubeyamyam examples
 
 # CI / CLI
-k8s-sec --cli examples
-k8s-sec --format json examples
-k8s-sec --format sarif --output findings.sarif --fail-on high examples
+kubeyamyam --cli examples
+kubeyamyam --format json examples
+kubeyamyam --format sarif --output findings.sarif --fail-on high examples
 ```
 
 ### Exit codes
@@ -73,14 +73,14 @@ Part of the same sibling layout as the rest of the k3s homelab tooling:
   small-homelab-boi/   # Ansible + k3s lab (provisioning)
   notears/             # chaos + Prometheus/Alertmanager detection
   sneaky-boi/          # secret scanner (.env, compose, ansible, k8s, HA)
-  k8s-security-tui/    # this repo — workload misconfig scanner
+  kubeyamyam/          # this repo — workload misconfig scanner
 ```
 
-| Repo | Role vs k8s-sec |
-|------|-----------------|
+| Repo | Role vs kubeyamyam |
+|------|--------------------|
 | [small-homelab-boi](https://github.com/thearrowoftime/small-homelab-boi) | Target lab — scan its Ansible K8s templates / manifests before deploy |
 | [notears](https://github.com/thearrowoftime/notears) | Runtime chaos + alert validation (pairs with SHB; complementary to static scans) |
-| [sneaky-boi](https://github.com/thearrowoftime/sneaky-boi) | Finds leaked credentials; k8s-sec finds insecure workload *config* |
+| [sneaky-boi](https://github.com/thearrowoftime/sneaky-boi) | Finds leaked credentials; kubeyamyam finds insecure workload *config* |
 
 Suggested flow against the lab:
 
@@ -89,7 +89,7 @@ Suggested flow against the lab:
 sneaky-boi ../small-homelab-boi --only env,compose,ansible,k8s
 
 # workload hardening in manifests
-k8s-sec --cli --fail-on high ../small-homelab-boi
+kubeyamyam --cli --fail-on high ../small-homelab-boi
 
 # after the lab is up — chaos + detection
 notears -c ../notears/config.yaml doctor
@@ -100,7 +100,7 @@ notears -c ../notears/config.yaml doctor
 [nethunter-report](https://github.com/thearrowoftime/nethunter-report) is a
 local-first Kali NetHunter companion for organizing Wi-Fi audit results. It is
 part of the same security-tooling portfolio but is **not** wired into the
-homelab k3s stack (no shared config or runtime dependency with k8s-sec).
+homelab k3s stack (no shared config or runtime dependency with kubeyamyam).
 
 ## License
 

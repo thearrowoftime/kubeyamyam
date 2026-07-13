@@ -1,18 +1,18 @@
 [package]
-name = "k8s-sec"
+name = "kubeyamyam"
 version = "1.0.0"
 edition = "2021"
 description = "Kubernetes manifest security scanner with TUI, JSON/SARIF export, and CI exit codes"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/thearrowoftime/k8s-security-tui"
-homepage = "https://github.com/thearrowoftime/k8s-security-tui"
+repository = "https://github.com/thearrowoftime/kubeyamyam"
+homepage = "https://github.com/thearrowoftime/kubeyamyam"
 authors = ["thearrowoftime"]
 keywords = ["kubernetes", "security", "sarif", "tui", "homelab"]
 categories = ["command-line-utilities", "development-tools"]
 
 [[bin]]
-name = "k8s-sec"
+name = "kubeyamyam"
 path = "src/main.rs"
 
 [dependencies]

@@ -8,7 +8,7 @@ use std::path::Path;
 pub fn build_report(path: &Path, findings: Vec<Finding>) -> ScanReport {
     let summary = ScanSummary::from_findings(&findings);
     ScanReport {
-        tool: "k8s-sec".into(),
+        tool: "kubeyamyam".into(),
         version: env!("CARGO_PKG_VERSION").into(),
         path: path.display().to_string(),
         findings,
@@ -112,7 +112,7 @@ pub fn write_sarif(report: &ScanReport, out: &mut dyn Write) -> Result<()> {
         "runs": [{
             "tool": {
                 "driver": {
-                    "name": "k8s-sec",
+                    "name": "kubeyamyam",
                     "version": report.version,
                     "informationUri": "https://github.com/thearrowoftime",
                     "rules": rules

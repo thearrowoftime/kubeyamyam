@@ -1,4 +1,4 @@
-name: k8s-sec
+name: kubeyamyam
 
 on:
   push:
@@ -17,9 +17,9 @@ jobs:
 
       - name: Scan manifests (fail on HIGH+)
         run: |
-          ./target/release/k8s-sec --cli \
+          ./target/release/kubeyamyam --cli \
             --format sarif \
-            --output k8s-sec.sarif \
+            --output kubeyamyam.sarif \
             --fail-on high \
             examples
 
@@ -27,5 +27,5 @@ jobs:
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: k8s-sec.sarif
+          sarif_file: kubeyamyam.sarif
         continue-on-error: true

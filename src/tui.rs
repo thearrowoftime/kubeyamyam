@@ -306,7 +306,7 @@ fn ui(frame: &mut Frame, app: &mut App) {
 
     if app.show_help {
         let help = Paragraph::new(
-            "k8s-sec — Kubernetes manifest security scanner\n\n\
+            "kubeyamyam — Kubernetes manifest security scanner\n\n\
              Checks: PRIV · HOSTPATH · LATEST · LIMITS · SA-DEFAULT · SA-AUTOMOUNT · SA-CLUSTERADMIN\n\n\
              Keys:\n\
                Enter / F5   Scan\n\

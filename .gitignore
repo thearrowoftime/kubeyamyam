@@ -1,4 +1,3 @@
 /target/
 *.sarif
 tmp-report.json
-tmp.sarif

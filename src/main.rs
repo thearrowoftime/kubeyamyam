@@ -53,7 +53,7 @@ impl FailOnArg {
 
 /// Kubernetes manifest security scanner (TUI + CI-friendly CLI).
 #[derive(Parser, Debug)]
-#[command(name = "k8s-sec", version, about)]
+#[command(name = "kubeyamyam", version, about)]
 struct Cli {
     /// File or directory with YAML manifests
     #[arg(default_value = ".")]
