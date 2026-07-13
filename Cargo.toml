@@ -1,0 +1,26 @@
+[package]
+name = "k8s-sec"
+version = "1.0.0"
+edition = "2021"
+description = "Kubernetes manifest security scanner with TUI, JSON/SARIF export, and CI exit codes"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/thearrowoftime/k8s-security-tui"
+homepage = "https://github.com/thearrowoftime/k8s-security-tui"
+authors = ["thearrowoftime"]
+keywords = ["kubernetes", "security", "sarif", "tui", "homelab"]
+categories = ["command-line-utilities", "development-tools"]
+
+[[bin]]
+name = "k8s-sec"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+crossterm = "0.28"
+ratatui = "0.29"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+walkdir = "2"

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: minimal-issues
+  namespace: staging
+spec:
+  containers:
+    - name: api
+      image: myregistry.io/api:v2.4.1
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+  automountServiceAccountToken: false

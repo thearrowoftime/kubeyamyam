@@ -1,0 +1,107 @@
+# k8s-sec
+
+Kubernetes manifest security scanner with an interactive TUI, JSON/SARIF export,
+and CI-friendly exit codes.
+
+Static analysis only — reads YAML from disk (no live cluster access). Checks
+privileged containers, `hostPath` mounts, `:latest` tags, missing resource
+limits, and ServiceAccount misuse (including `cluster-admin` bindings).
+
+## Install
+
+```bash
+cargo install --path .
+# or
+cargo build --release
+```
+
+## Usage
+
+```bash
+# Interactive TUI (default on a TTY)
+k8s-sec examples
+
+# CI / CLI
+k8s-sec --cli examples
+k8s-sec --format json examples
+k8s-sec --format sarif --output findings.sarif --fail-on high examples
+```
+
+### Exit codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Scan OK — no findings at/above `--fail-on` |
+| `1` | Findings at/above `--fail-on` (default: `high`) |
+| `2` | Usage / I/O error |
+
+`--fail-on never` always exits `0` after a successful scan.
+
+### Rules
+
+| ID | Severity | Check |
+|----|----------|-------|
+| `K8S-PRIV` | CRITICAL | `privileged: true` |
+| `K8S-HOSTPATH` | HIGH | `hostPath` volumes |
+| `K8S-LATEST` | MEDIUM | `:latest` / untagged images |
+| `K8S-LIMITS` | MEDIUM | missing `resources.limits` |
+| `K8S-SA-DEFAULT` | LOW | default ServiceAccount |
+| `K8S-SA-AUTOMOUNT` | MEDIUM | SA token automount enabled |
+| `K8S-SA-CLUSTERADMIN` | CRITICAL | SA bound to `cluster-admin` |
+
+Supports `Pod`, `Deployment`, `StatefulSet`, `DaemonSet`, `Job`, `CronJob`,
+`ReplicaSet`, plus `RoleBinding` / `ClusterRoleBinding`. Ansible/Helm Jinja
+placeholders in `*.yaml.j2` are neutralized so templates still parse.
+
+### TUI keys
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `F5` | Scan |
+| `/` | Edit path |
+| `f` / `r` | Filter severity / rule |
+| `j`/`k` | Navigate |
+| `?` | Help |
+| `q` | Quit |
+
+## Homelab suite
+
+Part of the same sibling layout as the rest of the k3s homelab tooling:
+
+```text
+~/Projects/
+  small-homelab-boi/   # Ansible + k3s lab (provisioning)
+  notears/             # chaos + Prometheus/Alertmanager detection
+  sneaky-boi/          # secret scanner (.env, compose, ansible, k8s, HA)
+  k8s-security-tui/    # this repo — workload misconfig scanner
+```
+
+| Repo | Role vs k8s-sec |
+|------|-----------------|
+| [small-homelab-boi](https://github.com/thearrowoftime/small-homelab-boi) | Target lab — scan its Ansible K8s templates / manifests before deploy |
+| [notears](https://github.com/thearrowoftime/notears) | Runtime chaos + alert validation (pairs with SHB; complementary to static scans) |
+| [sneaky-boi](https://github.com/thearrowoftime/sneaky-boi) | Finds leaked credentials; k8s-sec finds insecure workload *config* |
+
+Suggested flow against the lab:
+
+```bash
+# secrets in trees / diffs
+sneaky-boi ../small-homelab-boi --only env,compose,ansible,k8s
+
+# workload hardening in manifests
+k8s-sec --cli --fail-on high ../small-homelab-boi
+
+# after the lab is up — chaos + detection
+notears -c ../notears/config.yaml doctor
+```
+
+### Related (outside the k3s lab loop)
+
+[nethunter-report](https://github.com/thearrowoftime/nethunter-report) is a
+local-first Kali NetHunter companion for organizing Wi-Fi audit results. It is
+part of the same security-tooling portfolio but is **not** wired into the
+homelab k3s stack (no shared config or runtime dependency with k8s-sec).
+
+## License
+
+MIT
