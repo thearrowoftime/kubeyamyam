@@ -1,27 +1,24 @@
 # kubeyamyam
 
-Kubernetes manifest security scanner with an interactive TUI, JSON/SARIF export,
-and CI-friendly exit codes.
+Kubernetes security scanner with JSON export.
 
-Static analysis only — reads YAML from disk (no live cluster access). Checks
-privileged containers, `hostPath` mounts, `:latest` tags, missing resource
-limits, and ServiceAccount misuse (including `cluster-admin` bindings).
+Static analysis only — reads YAML from disk (no live cluster access). Checksprivileged containers, `hostPath` mounts, `:latest` tags, missing resource limits, ServiceAccount misuse (including `cluster-admin` bindings).
 
 ## Install
 
 ```bash
 cargo install --path .
-# or
+#or
 cargo build --release
 ```
 
 ## Usage
 
 ```bash
-# Interactive TUI (default on a TTY)
+#TUI (default on a TTY)
 kubeyamyam examples
 
-# CI / CLI
+#CLI
 kubeyamyam --cli examples
 kubeyamyam --format json examples
 kubeyamyam --format sarif --output findings.sarif --fail-on high examples
@@ -70,10 +67,10 @@ Part of the same sibling layout as the rest of the k3s homelab tooling:
 
 ```text
 ~/Projects/
-  small-homelab-boi/   # Ansible + k3s lab (provisioning)
-  notears/             # chaos + Prometheus/Alertmanager detection
-  sneaky-boi/          # secret scanner (.env, compose, ansible, k8s, HA)
-  kubeyamyam/          # this repo — workload misconfig scanner
+  small-homelab-boi/   #Ansible + k3s lab (provisioning)
+  notears/             #chaos + Prometheus/Alertmanager detection
+  sneaky-boi/          #secret scanner (.env, compose, ansible, k8s, HA)
+  kubeyamyam/          #this repo — workload misconfig scanner
 ```
 
 | Repo | Role vs kubeyamyam |
@@ -85,23 +82,12 @@ Part of the same sibling layout as the rest of the k3s homelab tooling:
 Suggested flow against the lab:
 
 ```bash
-# secrets in trees / diffs
+#secrets in diffs
 sneaky-boi ../small-homelab-boi --only env,compose,ansible,k8s
 
-# workload hardening in manifests
+#workload hardening
 kubeyamyam --cli --fail-on high ../small-homelab-boi
 
-# after the lab is up — chaos + detection
+#chaos + detection
 notears -c ../notears/config.yaml doctor
 ```
-
-### Related (outside the k3s lab loop)
-
-[nethunter-report](https://github.com/thearrowoftime/nethunter-report) is a
-local-first Kali NetHunter companion for organizing Wi-Fi audit results. It is
-part of the same security-tooling portfolio but is **not** wired into the
-homelab k3s stack (no shared config or runtime dependency with kubeyamyam).
-
-## License
-
-MIT
